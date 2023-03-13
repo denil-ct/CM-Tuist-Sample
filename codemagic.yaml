@@ -1,0 +1,31 @@
+# ========= BEGIN REUSABLE SECTIONS ==========
+definitions:
+  instance_mac_mini_m1: &instance_mac_mini_m1
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+
+  env_versions: &env_versions
+    xcode: 14.2
+    node: 18.0.0
+    cocoapods: 1.11.3  
+
+  scripts:
+    - &generate_xcode_project_sim
+      name: Generate Xcode project
+      script: |
+        ./Tuist/.tuist-bin/tuist fetch
+        ./Tuist/.tuist-bin/tuist generate --no-open
+
+workflows:
+# ========= BEGIN UNIT TEST WORKFLOW ==========
+  unit-tests-workflow:
+    name: Build and Test
+    <<: *instance_mac_mini_m1
+    
+    environment:
+      <<: *env_versions
+
+    scripts:
+      - *generate_xcode_project_sim
+# ========= END UNIT TEST WORKFLOW ==========        
+
